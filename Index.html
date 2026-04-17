@@ -3,26 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio | Admin Managed</title>
+<title>Portfolio | Private Archive</title>
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0d0d;
     --surface: #141414;
-    --surface2: #1c1c1c;
     --border: #2a2a2a;
     --text: #e8e2d9;
     --muted: #6b6560;
     --accent: #c9a96e;
-    --accent2: #7c9e8f;
-    --danger: #c96e6e;
-    --radius: 2px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; overflow-x: hidden; }
-
+  html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--text);
@@ -30,21 +25,9 @@
     font-size: 14px;
     line-height: 1.7;
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* SIDEBAR NAV */
+  /* SIDEBAR */
   nav {
     position: fixed;
     left: 0; top: 0; bottom: 0;
@@ -53,55 +36,38 @@
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: 48px 0 32px;
+    padding: 48px 0;
     z-index: 100;
   }
 
   .nav-logo { padding: 0 28px 40px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
-  .nav-logo h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; color: var(--text); }
+  .nav-logo h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; }
   .nav-logo span { color: var(--accent); font-style: italic; }
 
   nav a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    display: block;
     padding: 12px 28px;
     color: var(--muted);
     text-decoration: none;
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    transition: 0.2s;
   }
 
-  nav a:hover, nav a.active { color: var(--accent); }
+  nav a.active { color: var(--accent); }
 
-  /* MAIN CONTENT AREA */
-  main {
-    margin-left: 220px;
-    width: calc(100% - 220px);
-    position: relative;
-  }
+  /* MAIN CONTENT */
+  main { margin-left: 220px; width: calc(100% - 220px); }
 
   section {
     padding: 80px;
     border-bottom: 1px solid var(--border);
-    min-height: 100vh; /* This ensures sections are tall enough to scroll through */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    min-height: 100vh;
   }
 
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(40px, 6vw, 80px);
-    line-height: 1.1;
-    margin-bottom: 20px;
-  }
-
+  .hero-title { font-family: 'Playfair Display', serif; font-size: 60px; line-height: 1.1; margin-bottom: 20px; }
   .hero-title em { color: var(--accent); font-style: italic; }
 
-  /* CONTENT GRIDS */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -113,10 +79,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     padding: 30px;
-    transition: 0.3s;
   }
-
-  .card:hover { border-color: var(--accent); }
 
   .card-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 15px; }
 
@@ -131,7 +94,7 @@
     margin-top: 20px;
   }
 
-  /* MODALS */
+  /* MODAL */
   .modal-bg {
     display: none;
     position: fixed;
@@ -153,15 +116,7 @@
     max-height: 90vh;
     padding: 40px;
     overflow-y: auto;
-    position: relative;
   }
-
-  .close-btn { position: absolute; top: 20px; right: 20px; color: var(--muted); cursor: pointer; border: none; background: none; font-size: 20px; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--accent); }
 
   @media (max-width: 900px) {
     nav { width: 60px; }
@@ -174,138 +129,94 @@
 <body>
 
 <nav>
-  <div class="nav-logo">
-    <h1>My <span>Portfolio</span></h1>
-  </div>
-  <a href="#home" class="active"><span>⌂ Home</span></a>
-  <a href="#stories"><span>✦ Stories</span></a>
-  <a href="#essays"><span>≡ Essays</span></a>
-  <a href="#pictures"><span>◈ Pictures</span></a>
+  <div class="nav-logo"><h1>My <span>Portfolio</span></h1></div>
+  <a href="#home" class="active"><span>Home</span></a>
+  <a href="#stories"><span>Stories</span></a>
+  <a href="#essays"><span>Essays</span></a>
+  <a href="#accomplishments"><span>Awards</span></a>
 </nav>
 
 <main>
   <section id="home">
-    <p style="color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px;">Private Archive</p>
-    <h1 class="hero-title">A place for <em>everything</em> I create.</h1>
-    <p class="hero-desc" style="max-width:500px; color:var(--muted);">Only you can add content via the admin panel. Everyone else sees your published work.</p>
-    <p style="margin-top:40px; font-size:12px;">Admin? <a href="/admin/" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);">Login here</a></p>
+    <h1 class="hero-title">A place for <em>everything</em>.</h1>
+    <p>Admin? <a href="/admin/" style="color:var(--accent)">Login to upload</a></p>
   </section>
 
   <section id="stories">
-    <h2 style="font-family:'Fraunces'; font-weight:300; font-size:32px;">Stories</h2>
-    <div class="cards-grid" id="stories-grid">
-        </div>
+    <h2>Stories</h2>
+    <div class="cards-grid" id="stories-grid"></div>
   </section>
 
   <section id="essays">
-    <h2 style="font-family:'Fraunces'; font-weight:300; font-size:32px;">Essays</h2>
-    <div class="cards-grid" id="essays-grid">
-        </div>
+    <h2>Essays</h2>
+    <div class="cards-grid" id="essays-grid"></div>
+  </section>
+
+  <section id="accomplishments">
+    <h2>Accomplishments</h2>
+    <div id="accomplishments-grid" class="cards-grid"></div>
   </section>
 </main>
 
 <div class="modal-bg" id="read-modal">
   <div class="modal">
-    <button class="close-btn" onclick="closeReadModal()">✕</button>
+    <button onclick="document.getElementById('read-modal').classList.remove('open')" style="float:right; color:white; background:none; border:none; cursor:pointer;">✕</button>
     <h2 id="read-title" style="font-family:'Playfair Display'; font-size:32px; margin-bottom:20px;"></h2>
-    <div id="read-body" style="line-height:1.8; color:#ccc;"></div>
+    <div id="read-body" style="white-space: pre-wrap;"></div>
   </div>
 </div>
+
 <script>
-  // This function fetches your Stories, Essays, and Accomplishments
-  async function loadTextContent(type) {
-    const grid = document.getElementById(`${type}-grid`) || document.getElementById('acc-list');
+  const GH_USER = "ryanradosevich87-lab"; 
+  const GH_REPO = "Personal-website";
+
+  async function loadContent(type) {
+    const grid = document.getElementById(`${type}-grid`);
     if (!grid) return;
 
     try {
-      const response = await fetch(`/content/${type}/index.json`);
-      if (!response.ok) throw new Error('Not found');
-      const items = await response.json();
+      const response = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/content/${type}`);
+      const files = await response.json();
       grid.innerHTML = ''; 
 
-      items.forEach(item => {
-        const el = document.createElement('div');
-        
-        if (type === 'accomplishments') {
-          el.className = 'accomplishment-item';
-          el.innerHTML = `
-            <div class="acc-year">${item.year || ''}</div>
-            <div>
-              <div class="acc-title" style="font-family:'Playfair Display'; font-size:18px;">${item.title}</div>
-              <div class="acc-sub" style="color:var(--muted); font-size:11px;">${item.subtitle || ''}</div>
-            </div>
-            <span class="acc-badge" style="border:1px solid var(--border); padding:4px 8px; font-size:10px;">${item.type || 'Award'}</span>
+      for (const file of files) {
+        if (file.name.endsWith('.md')) {
+          const contentRes = await fetch(file.download_url);
+          const text = await contentRes.text();
+          
+          const title = text.match(/title:\s*"(.*)"/)?.[1] || file.name;
+          const body = text.split('---').pop().trim();
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="card-title">${title}</div>
+            <button class="card-link" onclick="openModal(\`${title}\`, \`${body.replace(/`/g, '\\`')}\`)">Read →</button>
           `;
-        } else {
-          el.className = 'card';
-          el.innerHTML = `
-            <div style="font-size:10px; color:var(--accent); margin-bottom:10px;">${item.date ? new Date(item.date).toLocaleDateString() : ''}</div>
-            <div class="card-title">${item.title}</div>
-            <p style="color:var(--muted); font-size:12px; margin-bottom:20px;">${item.excerpt || ''}</p>
-            <button class="card-link" onclick="openReadModal('${item.title.replace(/'/g, "\\'")}', '${item.body.replace(/\n/g, '<br>').replace(/'/g, "\\'")}')">Read More</button>
-          `;
+          grid.appendChild(card);
         }
-        grid.appendChild(el);
-      });
+      }
     } catch (e) {
-      grid.innerHTML = `<p class="muted">Nothing here yet. Add content in the <a href="/admin/" style="color:var(--accent)">admin panel</a>.</p>`;
+      grid.innerHTML = `<p class="muted">No ${type} yet.</p>`;
     }
   }
 
-  async function loadPhotos() {
-    const grid = document.getElementById('photo-grid');
-    if (!grid) return;
-    try {
-      const response = await fetch(`/content/photos/index.json`);
-      const photos = await response.json();
-      grid.innerHTML = '';
-      photos.forEach(photo => {
-        const div = document.createElement('div');
-        div.className = 'photo-item';
-        div.innerHTML = `
-          <img src="${photo.image}" alt="${photo.title}">
-          <div class="photo-overlay">
-            <div class="photo-name">${photo.title}</div>
-            <div class="photo-num">${photo.date ? new Date(photo.date).toLocaleDateString() : ''}</div>
-          </div>
-        `;
-        grid.appendChild(div);
-      });
-    } catch (e) {
-      grid.innerHTML = '<p class="muted">No photos yet.</p>';
-    }
-  }
-
-  function openReadModal(title, body) {
+  function openModal(title, body) {
     document.getElementById('read-title').textContent = title;
-    document.getElementById('read-body').innerHTML = body;
+    document.getElementById('read-body').innerHTML = body.replace(/\n/g, '<br>');
     document.getElementById('read-modal').classList.add('open');
   }
 
-  function closeReadModal() { document.getElementById('read-modal').classList.remove('open'); }
-
-  window.addEventListener('scroll', () => {
-    let current = "";
-    document.querySelectorAll('section').forEach(section => {
-      if (pageYOffset >= section.offsetTop - 150) { current = section.getAttribute('id'); }
-    });
-    document.querySelectorAll('nav a').forEach(a => {
-      a.classList.remove('active');
-      if (a.getAttribute('href').includes(current)) a.classList.add('active');
-    });
-  });
-
+  // Identity Login Check
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", user => {
-      if (!user) { window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; }); }
+      if (!user) { window.netlifyIdentity.on("login", () => { location.reload(); }); }
     });
   }
 
-  // RUN ALL LOADERS
-  loadTextContent('stories');
-  loadTextContent('essays');
-  loadTextContent('accomplishments');
-  loadPhotos();
+  loadContent('stories');
+  loadContent('essays');
+  loadContent('accomplishments');
 </script>
 </body>
 </html>
