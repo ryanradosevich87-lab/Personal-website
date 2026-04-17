@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio | Private Archive</title>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -27,7 +26,6 @@
     min-height: 100vh;
   }
 
-  /* SIDEBAR */
   nav {
     position: fixed;
     left: 0; top: 0; bottom: 0;
@@ -56,7 +54,6 @@
 
   nav a.active { color: var(--accent); border-left: 2px solid var(--accent); }
 
-  /* MAIN CONTENT */
   main { margin-left: 220px; width: calc(100% - 220px); }
 
   section {
@@ -79,7 +76,6 @@
   
   h2 { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 300; margin-bottom: 40px; }
 
-  /* GRIDS */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -117,7 +113,6 @@
     margin-top: 20px;
   }
 
-  /* MODAL */
   .modal-bg {
     display: none;
     position: fixed;
@@ -168,7 +163,6 @@
     <h1 class="hero-title">A place for <em>everything</em> I create & collect.</h1>
     <p class="hero-desc">Stories, essays, photographs, achievements, and the random things that make up a life. This is my personal archive — always growing.</p>
     <a href="#stories" style="color:var(--text); text-decoration: none;">Explore ↓</a>
-    <p style="margin-top: 60px; font-size: 11px; opacity: 0.5;">Admin? <a href="/admin/" style="color:var(--accent); text-decoration: none;">Login here</a></p>
   </section>
 
   <section id="stories">
@@ -214,8 +208,7 @@
     if (!grid) return;
 
     try {
-      // If folderPath is empty string, it fetches the root of the /content folder
-      const apiPath = folderPath ? `content/${folderPath}` : `content`;
+      const apiPath = `content/${folderPath}`;
       const response = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${apiPath}`);
       const files = await response.json();
       
@@ -274,29 +267,18 @@
     document.getElementById('read-modal').classList.remove('open');
   }
 
-  // Close modal if clicking background
   window.addEventListener('click', (e) => {
     const modal = document.getElementById('read-modal');
     if (e.target === modal) closeModal();
   });
 
   // --- LOADER CONFIGURATION ---
-  
-  // CHANGE THIS LINE: 
-  // It was ('', 'works-grid'), now we tell it to look in the 'stories' folder
   loadContent('stories', 'works-grid', false); 
-
-  // Keep these the same
   loadContent('essays', 'essays-grid', false);
   loadContent('photos', 'photos-grid', true);
   loadContent('accomplishments', 'accomplishments-grid', false);
   loadContent('random', 'random-grid', false);
 
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) { window.netlifyIdentity.on("login", () => { location.reload(); }); }
-    });
-  }
 </script>
 </body>
 </html>
