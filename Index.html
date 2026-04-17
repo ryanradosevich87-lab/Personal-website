@@ -211,78 +211,101 @@
     <div id="read-body" style="line-height:1.8; color:#ccc;"></div>
   </div>
 </div>
-
 <script>
-  // Placeholder Data - In a real setup, Decap CMS creates JSON files 
-  // and we fetch them. For now, this shows you how they will appear.
-  const sampleData = {
-    stories: [
-      { title: "The Silent Forest", excerpt: "An exploration of quiet spaces...", body: "This is the full story content that only you added from the admin panel." },
-      { title: "Midnight Echo", excerpt: "What happens when the lights go out?", body: "Full story text goes here." }
-    ],
-    essays: [
-      { title: "Modern Minimalism", excerpt: "Why less is usually more.", body: "An essay on design and life." }
-    ]
-  };
+  // This function fetches your Stories, Essays, and Accomplishments
+  async function loadTextContent(type) {
+    const grid = document.getElementById(`${type}-grid`) || document.getElementById('acc-list');
+    if (!grid) return;
 
-  function renderContent() {
-    ['stories', 'essays'].forEach(type => {
-      const grid = document.getElementById(`${type}-grid`);
-      if (sampleData[type].length > 0) {
-        sampleData[type].forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <div class="card-title">${item.title}</div>
-            <p style="color:var(--muted); font-size:12px;">${item.excerpt}</p>
-            <button class="card-link" onclick="openReadModal('${item.title}', '${item.body}')">Read More</button>
+    try {
+      const response = await fetch(`/content/${type}/index.json`);
+      if (!response.ok) throw new Error('Not found');
+      const items = await response.json();
+      grid.innerHTML = ''; 
+
+      items.forEach(item => {
+        const el = document.createElement('div');
+        
+        if (type === 'accomplishments') {
+          el.className = 'accomplishment-item';
+          el.innerHTML = `
+            <div class="acc-year">${item.year || ''}</div>
+            <div>
+              <div class="acc-title" style="font-family:'Playfair Display'; font-size:18px;">${item.title}</div>
+              <div class="acc-sub" style="color:var(--muted); font-size:11px;">${item.subtitle || ''}</div>
+            </div>
+            <span class="acc-badge" style="border:1px solid var(--border); padding:4px 8px; font-size:10px;">${item.type || 'Award'}</span>
           `;
-          grid.appendChild(card);
-        });
-      }
-    });
+        } else {
+          el.className = 'card';
+          el.innerHTML = `
+            <div style="font-size:10px; color:var(--accent); margin-bottom:10px;">${item.date ? new Date(item.date).toLocaleDateString() : ''}</div>
+            <div class="card-title">${item.title}</div>
+            <p style="color:var(--muted); font-size:12px; margin-bottom:20px;">${item.excerpt || ''}</p>
+            <button class="card-link" onclick="openReadModal('${item.title.replace(/'/g, "\\'")}', '${item.body.replace(/\n/g, '<br>').replace(/'/g, "\\'")}')">Read More</button>
+          `;
+        }
+        grid.appendChild(el);
+      });
+    } catch (e) {
+      grid.innerHTML = `<p class="muted">Nothing here yet. Add content in the <a href="/admin/" style="color:var(--accent)">admin panel</a>.</p>`;
+    }
+  }
+
+  async function loadPhotos() {
+    const grid = document.getElementById('photo-grid');
+    if (!grid) return;
+    try {
+      const response = await fetch(`/content/photos/index.json`);
+      const photos = await response.json();
+      grid.innerHTML = '';
+      photos.forEach(photo => {
+        const div = document.createElement('div');
+        div.className = 'photo-item';
+        div.innerHTML = `
+          <img src="${photo.image}" alt="${photo.title}">
+          <div class="photo-overlay">
+            <div class="photo-name">${photo.title}</div>
+            <div class="photo-num">${photo.date ? new Date(photo.date).toLocaleDateString() : ''}</div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    } catch (e) {
+      grid.innerHTML = '<p class="muted">No photos yet.</p>';
+    }
   }
 
   function openReadModal(title, body) {
     document.getElementById('read-title').textContent = title;
-    document.getElementById('read-body').textContent = body;
+    document.getElementById('read-body').innerHTML = body;
     document.getElementById('read-modal').classList.add('open');
   }
 
-  function closeReadModal() {
-    document.getElementById('read-modal').classList.remove('open');
-  }
+  function closeReadModal() { document.getElementById('read-modal').classList.remove('open'); }
 
-  // Handle Scroll Highlighting for Nav
   window.addEventListener('scroll', () => {
     let current = "";
     document.querySelectorAll('section').forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (pageYOffset >= sectionTop - 150) {
-        current = section.getAttribute('id');
-      }
+      if (pageYOffset >= section.offsetTop - 150) { current = section.getAttribute('id'); }
     });
-
     document.querySelectorAll('nav a').forEach(a => {
       a.classList.remove('active');
-      if (a.getAttribute('href').includes(current)) {
-        a.classList.add('active');
-      }
+      if (a.getAttribute('href').includes(current)) a.classList.add('active');
     });
   });
 
-  // Netlify Identity Login Check
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
+      if (!user) { window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; }); }
     });
   }
 
-  renderContent();
+  // RUN ALL LOADERS
+  loadTextContent('stories');
+  loadTextContent('essays');
+  loadTextContent('accomplishments');
+  loadPhotos();
 </script>
 </body>
 </html>
