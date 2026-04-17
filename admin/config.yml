@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ryanradosevich87-lab/Personal-website
   branch: main
-  base_url: https://voluble-gecko-170a26.netlify.app
+  base_url: https://customwebportfolio.netlify.app
   auth_endpoint: /auth
 
 media_folder: "images/uploads"
