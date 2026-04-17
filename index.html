@@ -3,119 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Ryan Radosevich</title>
+    <title>Ryan Radosevich | Portfolio</title>
     <style>
-        :root {
-            --bg-color: #0d0d0d;
-            --text-color: #e0e0e0;
-            --accent-color: #007bff;
-            --card-bg: #1a1a1a;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Garamond', serif; /* Or your original font */
             margin: 0;
-            line-height: 1.6;
+            padding: 0;
         }
 
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px 5%;
-            background: rgba(0,0,0,0.8);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        /* The Missing Admin Button */
+        .admin-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
         }
 
-        nav a {
-            color: var(--text-color);
+        .admin-nav a {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 8px 15px;
             text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-        }
-
-        .admin-btn {
-            background: var(--accent-color);
-            padding: 5px 15px;
+            border: 1px solid #444;
             border-radius: 4px;
-            transition: opacity 0.2s;
+            font-size: 14px;
+            transition: 0.3s;
         }
 
-        .admin-btn:hover { opacity: 0.8; }
+        .admin-nav a:hover {
+            background: #fff;
+            color: #000;
+        }
 
-        /* Works Grid */
-        .container { padding: 40px 5%; }
-        
-        #works-grid {
+        /* Hero Section (Restoring your layout) */
+        header {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 { font-size: 3rem; letter-spacing: 5px; margin-bottom: 10px; }
+        .subtitle { font-style: italic; color: #888; }
+
+        /* Content Sections */
+        .section-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
         }
 
-        .work-card {
-            background: var(--card-bg);
+        /* Card Styling (Restoring the look) */
+        .item-card {
+            border: 1px solid #222;
             padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #333;
+            transition: transform 0.3s;
         }
 
-        .work-card h3 { margin-top: 0; color: var(--accent-color); }
+        .item-card:hover {
+            transform: translateY(-5px);
+            border-color: #555;
+        }
+
+        .item-card h3 { margin-top: 0; color: #d4af37; /* Gold accent */ }
+        .item-card p { font-size: 0.9rem; line-height: 1.4; color: #ccc; }
+        
+        footer { text-align: center; padding: 40px; color: #444; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">RYAN RADOSEVICH</div>
-        <div class="links">
-            <a href="#works">Works</a>
-            <a href="admin/" class="admin-btn">Admin Login</a>
-        </div>
+    <nav class="admin-nav">
+        <a href="admin/">Admin Panel</a>
     </nav>
 
-    <div class="container">
-        <h2 id="works">Selected Works</h2>
-        <div id="works-grid">
-            <p>Loading stories...</p>
+    <header>
+        <h1>RYAN RADOSEVICH</h1>
+        <div class="subtitle">Writer | Creator | Historian</div>
+    </header>
+
+    <div class="section-container">
+        <h2>Works</h2>
+        <div id="works-grid" class="grid">
+            <p>Loading your stories...</p>
         </div>
     </div>
 
+    <div class="section-container">
+        <h2>Essays</h2>
+        <div id="essays-grid" class="grid">
+            <p>Loading your essays...</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Ryan Radosevich. Built on GitHub Pages.
+    </footer>
+
     <script>
-        async function loadContent(folder, targetId) {
+        // Restored Logic to pull from YOUR specific folders
+        async function fetchContent(folder, elementId) {
             const repo = "ryanradosevich87-lab/Personal-website";
             const url = `https://api.github.com/repos/${repo}/contents/content/${folder}`;
             
             try {
                 const response = await fetch(url);
-                const files = await response.json();
-                const grid = document.getElementById(targetId);
-                grid.innerHTML = ''; // Clear loading text
+                const items = await response.json();
+                const container = document.getElementById(elementId);
+                container.innerHTML = '';
 
-                for (const file of files) {
-                    if (file.name.endsWith('.md')) {
-                        const rawRes = await fetch(file.download_url);
-                        const text = await rawRes.text();
+                for (const item of items) {
+                    if (item.name.endsWith('.md')) {
+                        const raw = await fetch(item.download_url);
+                        const content = await raw.text();
                         
-                        // Basic Meta-data parsing
-                        const titleMatch = text.match(/title:\s*"(.*)"/) || text.match(/title:\s*(.*)/);
-                        const title = titleMatch ? titleMatch[1] : file.name;
+                        // Extract title from Markdown Frontmatter
+                        const title = content.match(/title:\s*["']?(.*?)["']?$/m)?.[1] || item.name;
+                        const date = content.match(/date:\s*(.*)/)?.[1] || "";
 
                         const card = document.createElement('div');
-                        card.className = 'work-card';
-                        card.innerHTML = `<h3>${title}</h3><p>Click to read more on GitHub.</p><a href="${file.html_url}" target="_blank" style="color:white">View Source</a>`;
-                        grid.appendChild(card);
+                        card.className = 'item-card';
+                        card.innerHTML = `
+                            <h3>${title}</h3>
+                            <small>${date}</small>
+                            <p>Read the full piece by clicking the link below.</p>
+                            <a href="${item.html_url}" target="_blank" style="color: #888; font-size: 12px;">View on GitHub</a>
+                        `;
+                        container.appendChild(card);
                     }
                 }
-            } catch (e) {
-                console.error("Error loading content:", e);
+            } catch (err) {
+                console.error("Failed to load", folder);
             }
         }
 
-        // Initialize loading
-        loadContent('stories', 'works-grid');
+        // Run the loaders for your different categories
+        fetchContent('stories', 'works-grid');
+        fetchContent('essays', 'essays-grid');
     </script>
 </body>
 </html>
