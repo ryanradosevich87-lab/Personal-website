@@ -54,6 +54,16 @@
 
   nav a.active { color: var(--accent); border-left: 2px solid var(--accent); }
 
+  /* Admin Button Styling Added Here */
+  .admin-link {
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    color: var(--accent) !important;
+    opacity: 0.7;
+  }
+  .admin-link:hover { opacity: 1; }
+
   main { margin-left: 220px; width: calc(100% - 220px); }
 
   section {
@@ -155,6 +165,7 @@
   <a href="#pictures"><span>Pictures</span></a>
   <a href="#accomplishments"><span>Awards</span></a>
   <a href="#random"><span>Random</span></a>
+  <a href="admin/" class="admin-link"><span>Admin Login</span></a>
 </nav>
 
 <main>
@@ -272,7 +283,6 @@
     if (e.target === modal) closeModal();
   });
 
-  // --- LOADER CONFIGURATION ---
   loadContent('stories', 'works-grid', false); 
   loadContent('essays', 'essays-grid', false);
   loadContent('photos', 'photos-grid', true);
