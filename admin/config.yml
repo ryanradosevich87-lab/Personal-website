@@ -5,25 +5,37 @@ backend:
   base_url: https://customwebportfolio.netlify.app
   auth_endpoint: /auth
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+media_folder: "content/photos"
+public_folder: "/content/photos"
 
 collections:
   - name: "stories"
     label: "Works"
     folder: "content/stories"
     create: true
+    slug: "{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Excerpt", name: "excerpt", widget: "string"}
-      - {label: "Story Content", name: "body", widget: "markdown"}
+      - {label: "Body", name: "body", widget: "markdown"}
 
   - name: "essays"
     label: "Essays"
     folder: "content/essays"
     create: true
+    slug: "{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
-      - {label: "Date", name: "date", widget: "datetime"}
-      - {label: "Essay Content", name: "body", widget: "markdown"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "photos"
+    label: "Pictures"
+    folder: "content/photos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Image", name: "image", widget: "image"}
+      - {label: "Caption", name: "body", widget: "markdown"}
