@@ -281,10 +281,12 @@
   });
 
   // --- LOADER CONFIGURATION ---
-  // Load everything from the main 'content' folder into the 'Works' section
-  loadContent('', 'works-grid', false); 
+  
+  // CHANGE THIS LINE: 
+  // It was ('', 'works-grid'), now we tell it to look in the 'stories' folder
+  loadContent('stories', 'works-grid', false); 
 
-  // Load from specific sub-folders if you have them
+  // Keep these the same
   loadContent('essays', 'essays-grid', false);
   loadContent('photos', 'photos-grid', true);
   loadContent('accomplishments', 'accomplishments-grid', false);
