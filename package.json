@@ -1,7 +1,0 @@
-{
-  "name": "my-custom-portfolio",
-  "version": "1.0.0",
-  "dependencies": {
-    "netlify-plugin-fetch-feeds": "^1.0.0"
-  }
-}
