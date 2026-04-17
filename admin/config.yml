@@ -2,8 +2,6 @@ backend:
   name: git-gateway
   repo: ryanradosevich87-lab/Personal-website
   branch: main
-  base_url: https://mycustomwebportfolio.netlify.app
-  auth_endpoint: /auth
 
 media_folder: "content/photos"
 public_folder: "/content/photos"
