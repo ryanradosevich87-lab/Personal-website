@@ -4,6 +4,7 @@ backend:
   branch: main
   base_url: https://voluble-gecko-170a26.netlify.app
   auth_endpoint: /auth
+
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
@@ -26,22 +27,3 @@ collections:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Date", name: "date", widget: "datetime"}
       - {label: "Essay Content", name: "body", widget: "markdown"}
-
-  - name: "photos"
-    label: "Pictures"
-    folder: "content/photos"
-    create: true
-    fields:
-      - {label: "Image", name: "image", widget: "image"}
-      - {label: "Caption", name: "title", widget: "string"}
-      - {label: "Date Taken", name: "date", widget: "datetime"}
-
-  - name: "accomplishments"
-    label: "Accomplishments"
-    folder: "content/accomplishments"
-    create: true
-    fields:
-      - {label: "Achievement Title", name: "title", widget: "string"}
-      - {label: "Subtitle/Organization", name: "subtitle", widget: "string"}
-      - {label: "Year", name: "year", widget: "string"}
-      - {label: "Type", name: "type", widget: "select", options: ["Award", "Achievement", "Milestone", "Other"]}
