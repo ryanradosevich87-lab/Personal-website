@@ -205,7 +205,6 @@
     <div id="read-body" style="white-space: pre-wrap; font-size: 16px; color: #ccc;"></div>
   </div>
 </div>
-
 <script>
   const GH_USER = "ryanradosevich87-lab"; 
   const GH_REPO = "Personal-website";
@@ -226,18 +225,22 @@
           const contentRes = await fetch(file.download_url);
           const text = await contentRes.text();
           
-          const title = text.match(/title:\s*"(.*)"/)?.[1] || file.name;
+          // IMPROVED: This finds the title even if it has quotes, single quotes, or no quotes
+          const titleMatch = text.match(/^title:\s*["']?(.*?)["']?$/m);
+          const dateMatch = text.match(/^date:\s*["']?(.*?)["']?$/m);
+          const imgMatch = text.match(/^image:\s*["']?(.*?)["']?$/m);
+          
+          // Use the matched title; if it fails, use filename without .md
+          const title = titleMatch ? titleMatch[1] : file.name.replace('.md', '');
+          const cleanDate = dateMatch ? dateMatch[1].split('T')[0] : "";
           const body = text.split('---').pop().trim();
-          const imgMatch = text.match(/image:\s*(.*)/);
-          const dateMatch = text.match(/date:\s*(.*)/);
-          const cleanDate = dateMatch ? dateMatch[1].replace(/"/g, '').split('T')[0] : "";
 
           const card = document.createElement('div');
           
           if (type === 'pictures' || type === 'photos') {
             card.className = 'card photo-card';
             card.innerHTML = `
-              <img src="${imgMatch ? imgMatch[1].replace(/"/g, '').trim() : ''}" class="photo-img">
+              <img src="${imgMatch ? imgMatch[1].trim() : ''}" class="photo-img">
               <div class="photo-caption">${title}</div>
               <div class="photo-date">${cleanDate}</div>
             `;
@@ -253,13 +256,14 @@
         }
       }
     } catch (e) {
-      grid.innerHTML = `<p class="muted">Waiting for content...</p>`;
+      console.error("Content failed to load:", e);
     }
   }
 
   function openModal(title, body) {
+    const modalBody = document.getElementById('read-body');
     document.getElementById('read-title').textContent = title;
-    document.getElementById('read-body').innerHTML = body.replace(/\n/g, '<br>');
+    modalBody.innerHTML = body.replace(/\n/g, '<br>');
     document.getElementById('read-modal').classList.add('open');
   }
 
