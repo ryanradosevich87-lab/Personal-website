@@ -10,7 +10,7 @@ public_folder: "/images/uploads"
 
 collections:
   - name: "stories"
-    label: "Stories"
+    label: "Works"
     folder: "content/stories"
     create: true
     fields:
