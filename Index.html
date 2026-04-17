@@ -210,7 +210,6 @@
   const GH_REPO = "Personal-website";
 
   async function loadContent(type) {
-    // Maps 'pictures' link to 'photos' folder
     const folder = type === 'pictures' ? 'photos' : type;
     const grid = document.getElementById(`${folder}-grid`);
     if (!grid) return;
@@ -246,15 +245,17 @@
             `;
           } else {
             card.className = 'card';
-            // We escape the body text carefully so the button doesn't break
-            const escapedBody = body.replace(/`/g, '\\`').replace(/\n/g, '\\n');
-            const escapedTitle = title.replace(/'/g, "\\'");
-
             card.innerHTML = `
               <div style="font-size:10px; color:var(--accent); margin-bottom:10px;">${cleanDate}</div>
               <div class="card-title">${title}</div>
-              <button class="card-link" onclick="openModal('${escapedTitle}', \`${escapedBody}\`)">View Details →</button>
+              <button class="card-link">View Details →</button>
             `;
+
+            // FIX: Attach the click event directly to the button here
+            // This bypasses the HTML 'onclick' issues entirely
+            card.querySelector('button').addEventListener('click', () => {
+              openModal(title, body);
+            });
           }
           grid.appendChild(card);
         }
@@ -264,7 +265,6 @@
     }
   }
 
-  // THE MODAL FUNCTION
   function openModal(title, body) {
     const modal = document.getElementById('read-modal');
     const titleEl = document.getElementById('read-title');
@@ -272,21 +272,24 @@
 
     if (modal && titleEl && bodyEl) {
       titleEl.textContent = title;
-      // Convert line breaks back to HTML tags so the story looks right
-      bodyEl.innerHTML = body.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+      // Convert standard line breaks into HTML line breaks
+      bodyEl.innerHTML = body.replace(/\n/g, '<br>');
       modal.classList.add('open');
     }
   }
 
-  // CLOSE MODAL LOGIC
   function closeModal() {
     document.getElementById('read-modal').classList.remove('open');
   }
 
-  // Start the loading
+  // Close modal if clicking outside the box
+  window.addEventListener('click', (e) => {
+    const modal = document.getElementById('read-modal');
+    if (e.target === modal) closeModal();
+  });
+
   ['stories', 'essays', 'pictures', 'accomplishments', 'random'].forEach(loadContent);
 
-  // Netlify Identity
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", user => {
       if (!user) { window.netlifyIdentity.on("login", () => { location.reload(); }); }
