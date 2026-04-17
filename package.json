@@ -1,0 +1,7 @@
+{
+  "name": "my-custom-portfolio",
+  "version": "1.0.0",
+  "dependencies": {
+    "netlify-plugin-netlify-cms-folder-to-json": "^1.0.1"
+  }
+}
