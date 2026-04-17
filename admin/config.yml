@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ryanradosevich87-lab/Personal-website
   branch: main
-  base_url: https://customwebportfolio.netlify.app
+  base_url: https://mycustomwebportfolio.netlify.app
   auth_endpoint: /auth
 
 media_folder: "content/photos"
