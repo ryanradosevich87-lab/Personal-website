@@ -54,14 +54,6 @@
 
   nav a.active { color: var(--accent); border-left: 2px solid var(--accent); }
 
-  /* Admin Login Button Styling */
-  .admin-link {
-    margin-top: auto; 
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-    color: var(--accent) !important;
-  }
-
   main { margin-left: 220px; width: calc(100% - 220px); }
 
   section {
@@ -163,7 +155,6 @@
   <a href="#pictures"><span>Pictures</span></a>
   <a href="#accomplishments"><span>Awards</span></a>
   <a href="#random"><span>Random</span></a>
-  <a href="admin/" class="admin-link"><span>Admin Login</span></a>
 </nav>
 
 <main>
@@ -217,7 +208,6 @@
     if (!grid) return;
 
     try {
-      // Correct folder path syntax to match your GitHub structure
       const apiPath = `content/${folderPath}`;
       const response = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${apiPath}`);
       const files = await response.json();
@@ -282,7 +272,7 @@
     if (e.target === modal) closeModal();
   });
 
-  // RESTORED LOADERS:
+  // --- LOADER CONFIGURATION ---
   loadContent('stories', 'works-grid', false); 
   loadContent('essays', 'essays-grid', false);
   loadContent('photos', 'photos-grid', true);
